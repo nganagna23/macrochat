@@ -3,285 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1020">
-<link rel="manifest" href="manifest.webmanifest">
-<title>LATOTO Macro Center</title>
+<meta name="theme-color" content="#07111f">
+<title>LATOTO Macro Center Online</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#080d1a;--panel:#10182b;--panel2:#0d1424;--line:#26324b;
-  --text:#eef4ff;--muted:#93a4c2;--accent:#6ea8ff;--accent2:#8b5cf6;
-  --good:#22c55e;--danger:#ef4444;--warn:#f59e0b;
-  --shadow:0 16px 50px rgba(0,0,0,.28)
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:radial-gradient(circle at 20% -10%,#17254b 0,#080d1a 38%,#070b15 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-button,input,textarea,select{font:inherit}button{cursor:pointer}
-.app{min-height:100vh}
-.top{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(8,13,26,.82);backdrop-filter:blur(16px)}
-.topin{max-width:1200px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
-.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent2),var(--accent));font-weight:900;box-shadow:0 8px 24px rgba(110,168,255,.18)}
-.brand{min-width:0}.brand h1{font-size:16px;margin:0}.brand p{font-size:11px;color:var(--muted);margin:2px 0 0}
-.spacer{flex:1}.iconbtn,.pillbtn{border:1px solid var(--line);color:var(--text);background:rgba(255,255,255,.04);border-radius:11px;padding:9px 11px}
-.hero{max-width:1200px;margin:auto;padding:26px 16px 10px}.hero h2{font-size:30px;line-height:1.08;margin:0 0 8px;letter-spacing:-.8px}.hero p{margin:0;color:var(--muted);max-width:720px;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
-.stat{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:16px;padding:13px;box-shadow:var(--shadow)}
-.stat b{font-size:20px;display:block}.stat span{font-size:11px;color:var(--muted)}
-.toolbar{max-width:1200px;margin:auto;padding:14px 16px;display:grid;grid-template-columns:1.6fr .65fr .65fr auto auto;gap:9px}
-.field{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:11px 13px;border-radius:12px;outline:none}
-.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(110,168,255,.11)}
-.btn{border:0;border-radius:12px;padding:11px 14px;background:linear-gradient(135deg,#4f7cff,#7c55ea);color:#fff;font-weight:700}
-.btn.secondary{background:var(--panel);border:1px solid var(--line)}
-.btn.good{background:linear-gradient(135deg,#0ea55b,#20c77a)}
-.btn.danger{background:linear-gradient(135deg,#8d2b3c,#c43a51)}
-.layout{max-width:1200px;margin:auto;padding:0 16px 30px;display:grid;grid-template-columns:1fr 420px;gap:14px}
-.panel{background:rgba(16,24,43,.82);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
-.panelhead{padding:13px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.panelhead h3{margin:0;font-size:13px}.panelhead span{font-size:11px;color:var(--muted)}
-.list{padding:9px;max-height:72vh;overflow:auto}
-.card{padding:13px;border:1px solid var(--line);border-radius:14px;background:rgba(7,12,25,.52);margin-bottom:8px}
-.card:hover{border-color:#36517a}.card.selected{border-color:#5f83c9;box-shadow:0 0 0 1px rgba(110,168,255,.15) inset}
-.trigger{color:#90b9ff;font-weight:800;font-size:12px;word-break:break-word}
-.preview{color:#d6e0f3;margin-top:6px;font-size:12px;line-height:1.55;white-space:pre-wrap;max-height:78px;overflow:hidden}
-.meta{display:flex;align-items:center;gap:6px;margin-top:9px;flex-wrap:wrap}
-.tag{font-size:10px;color:#aebcda;background:#18223a;border:1px solid #273755;border-radius:999px;padding:3px 7px}
-.tag.hot{color:#fcd68a;background:#2a2315;border-color:#624b1d}.tag.none{color:#c4c8d0}
-.cardactions{margin-left:auto;display:flex;gap:6px}
-.mini{border:1px solid var(--line);background:#131d31;color:#fff;border-radius:9px;padding:7px 9px;font-size:11px}
-.detail{padding:16px}.detail .trigger{font-size:16px}
-.fulltext{margin-top:12px;background:#0a1020;border:1px solid var(--line);border-radius:14px;padding:14px;white-space:pre-wrap;line-height:1.65;font-size:13px;min-height:300px;max-height:54vh;overflow:auto}
-.detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.detail-actions.three{grid-template-columns:1fr 1fr 1fr}
-.empty{padding:36px 16px;text-align:center;color:var(--muted);font-size:12px}
-.footer{max-width:1200px;margin:auto;padding:0 16px 24px;color:#7183a4;font-size:10px}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(90px);background:#111b2f;border:1px solid #31415f;color:#fff;padding:10px 14px;border-radius:999px;box-shadow:var(--shadow);font-size:12px;z-index:50;transition:.25s}.toast.show{transform:translateX(-50%) translateY(0)}
-.modal{position:fixed;inset:0;background:rgba(2,6,14,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:40}.modal.show{display:flex}
-.modalbox{max-width:620px;width:100%;background:#0e1628;border:1px solid var(--line);border-radius:18px;padding:16px;max-height:92vh;overflow:auto}
-.modalbox h3{margin:0 0 8px}.modalbox p{color:var(--muted);font-size:12px;line-height:1.55}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fieldgroup{margin-bottom:10px}.fieldgroup label{display:block;font-size:11px;color:#bac8e2;margin-bottom:5px}
-.status{display:none;margin:0 auto 10px;max-width:1200px;padding:11px 16px;border:1px solid var(--line);font-size:12px}.status.show{display:block}.status.ok{background:rgba(34,197,94,.08);border-color:#1d6b43}.status.warn{background:rgba(245,158,11,.08);border-color:#7f5514}
-.progress{height:4px;max-width:1200px;margin:0 auto 10px;background:#0b1220;overflow:hidden;border-radius:99px;display:none}.progress.show{display:block}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.filelabel{display:inline-flex;align-items:center;justify-content:center}
-@media(max-width:900px){
-  .layout{grid-template-columns:1fr}.detail{order:-1}.fulltext{min-height:180px;max-height:36vh}.list{max-height:none}
-  .toolbar{grid-template-columns:1fr 1fr 1fr}.toolbar .wide{grid-column:1/-1}
-}
-@media(max-width:560px){
-  .topin{padding:11px 12px}.hero{padding:22px 12px 8px}.hero h2{font-size:25px}.stats{grid-template-columns:repeat(2,1fr)}
-  .toolbar{padding:10px 12px;grid-template-columns:1fr}.toolbar .wide{grid-column:auto}.layout{padding:0 12px 22px}.stat{padding:11px}
-  .detail-actions,.detail-actions.three{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}
-}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7fb;color:#101828}
+button,input,textarea,select{font:inherit}button{border:0;border-radius:11px;padding:10px 13px;cursor:pointer}
+.top{background:#07111f;color:#fff;padding:17px 14px;position:sticky;top:0;z-index:10}.bar,.main{max-width:1150px;margin:auto}
+.logo{font-size:20px;font-weight:800}.sub{font-size:12px;color:#abb9cf;margin-top:3px}.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.pill{font-size:11px;padding:6px 9px;border:1px solid #ffffff22;border-radius:99px;background:#ffffff0d}
+.main{padding:14px}.card{background:#fff;border-radius:18px;padding:14px;box-shadow:0 7px 28px #10182812;margin-bottom:12px}
+.btn{background:#111827;color:#fff}.blue{background:#2563eb;color:#fff}.green{background:#047857;color:#fff}.red{background:#b42318;color:#fff}.soft{background:#e9eef5;color:#101828}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.grid{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:900px){.grid{grid-template-columns:390px 1fr}}
+.toolbar{display:grid;grid-template-columns:1fr 155px;gap:8px}.list{max-height:67vh;overflow:auto;margin-top:10px}
+.item{border:1px solid #e4e7ec;border-radius:14px;padding:10px;margin-bottom:8px}.item.active{border-color:#8ba8ff;box-shadow:0 0 0 2px #2563eb12}
+.trigger{font-weight:800;color:#1d4ed8;word-break:break-word}.meta{font-size:10px;color:#98a2b3;margin-top:3px}.snip{white-space:pre-wrap;font-size:12px;color:#475467;margin-top:6px;max-height:90px;overflow:hidden}
+.preview{white-space:pre-wrap;background:#f8fafc;border:1px solid #edf0f4;border-radius:12px;padding:12px;line-height:1.6;max-height:60vh;overflow:auto}.empty{text-align:center;color:#667085;padding:35px 10px}
+.notice{font-size:12px;line-height:1.6;color:#475467}.helper{font-size:11px;color:#667085;margin-top:7px;line-height:1.5}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;justify-content:center;z-index:30}.modal.show{display:flex}.sheet{background:#fff;width:100%;max-width:700px;border-radius:22px 22px 0 0;padding:16px;max-height:90vh;overflow:auto}.sheet h2{margin:0 0 12px}
+.field{margin-bottom:10px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+input,textarea,select{width:100%;padding:10px 11px;border:1px solid #d0d5dd;border-radius:11px;background:#fff;outline:none}
+.auth{max-width:430px;margin:60px auto}.hidden{display:none!important}.account{font-size:11px;color:#c1cbda}
+.toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,15px);opacity:0;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;z-index:50;transition:.2s;font-size:12px}.toast.on{opacity:1;transform:translate(-50%,0)}
+code,kbd{background:#eef2ff;color:#3730a3;padding:2px 5px;border-radius:5px}
 </style>
 </head>
 <body>
-<div class="app">
-<header class="top"><div class="topin">
-  <div class="logo">LM</div>
-  <div class="brand"><h1>LATOTO Macro Center</h1><p>Macro & quick reply console</p></div>
-  <div class="spacer"></div>
-  <button class="iconbtn" id="installBtn" hidden>Install</button>
-  <button class="iconbtn" id="helpBtn">?</button>
+<header class="top hidden" id="appHeader"><div class="bar">
+<div class="toprow"><div><div class="logo">LATOTO Macro Center</div><div class="sub">Macro online • sinkron antar perangkat</div></div><button class="soft" id="logout">Keluar</button></div>
+<div class="pills"><span class="pill" id="countPill">0 macro</span><span class="pill" id="triggerPill">0 trigger</span><span class="pill account" id="accountPill"></span></div>
 </div></header>
 
-<section class="hero">
-  <h2>Macro Center, satu tempat.</h2>
-  <p>Import macro, simpan di browser, cari trigger secepat mungkin, lalu copy atau kelola isi macro dari satu dashboard.</p>
-  <div class="stats">
-    <div class="stat"><b id="total">0</b><span>Total macro</span></div>
-    <div class="stat"><b id="triggers">0</b><span>Trigger unik</span></div>
-    <div class="stat"><b id="textCount">0</b><span>Text trigger</span></div>
-    <div class="stat"><b id="hotkeyCount">0</b><span>Hotkey / system</span></div>
-  </div>
+<main class="main">
+<section class="card auth" id="authCard">
+<h2 style="margin-top:0">LATOTO Macro Center</h2>
+<div class="notice">Login untuk menyimpan macro secara online. Data setiap akun dipisahkan dengan Row Level Security.</div>
+<div class="field" style="margin-top:14px"><label>Email</label><input id="email" type="email" autocomplete="email"></div>
+<div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div>
+<div class="actions"><button class="blue" id="login">Login</button><button class="soft" id="signup">Daftar</button></div>
+<div class="helper" id="authMsg"></div>
 </section>
 
-<section class="toolbar">
-  <input class="field wide" id="q" placeholder="Cari trigger, hotkey, nama, atau kata dalam macro..." autocomplete="off">
-  <select class="field" id="type"><option value="all">Semua tipe</option><option value="text">Text trigger</option><option value="hotkey">Hotkey / system</option><option value="none">Tanpa trigger</option></select>
-  <select class="field" id="sort"><option value="trigger">Urut trigger</option><option value="new">Terbaru</option><option value="old">Terlama</option></select>
-  <button class="btn secondary" id="random">Acak</button>
-  <button class="btn" id="importBtn">Import</button>
-  <input id="fileInput" type="file" accept=".txt,.xml,.4pk,text/plain,application/xml" hidden>
+<div id="app" class="hidden">
+<section class="card">
+<div class="notice"><b>Impor:</b> pilih XML hasil export Perfect Keyboard/MTW. Semua <code>&lt;macro&gt;</code> dibaca dan disimpan online. Macro yang tidak memiliki <code>&lt;tscut&gt;</code> tetap dipertahankan menggunakan metadata hotkey.</div>
+<div class="actions"><label><button class="green">Import XML</button><input id="xml" type="file" accept=".xml,application/xml,text/xml" hidden></label>
+<button class="soft" id="add">＋ Macro</button><button class="soft" id="backup">Backup JSON</button><button class="soft" id="restoreBtn">Restore JSON</button><input id="restore" type="file" accept=".json,application/json" hidden>
+<button class="soft" id="export">Export XML</button><button class="red" id="clear">Hapus Semua</button></div>
+<div class="helper" id="syncInfo">Sinkronisasi online...</div>
 </section>
 
-<div class="status" id="status"></div>
-<div class="progress" id="progress"><i id="progressBar"></i></div>
-
-<main class="layout">
-  <section class="panel">
-    <div class="panelhead"><h3>Daftar Macro</h3><span id="result">0 hasil</span></div>
-    <div class="list" id="list"></div>
-  </section>
-
-  <section class="panel">
-    <div class="panelhead"><h3>Preview</h3><span id="selectedBadge">Belum dipilih</span></div>
-    <div class="detail">
-      <div class="trigger" id="dTrigger">Pilih macro dari daftar</div>
-      <div class="meta">
-        <span class="tag" id="dType">—</span>
-        <span class="kbd" id="dId">—</span>
-      </div>
-      <div class="fulltext" id="dText">Isi macro akan tampil di sini.</div>
-      <div class="detail-actions">
-        <button class="btn good" id="copy">Copy</button>
-        <button class="btn secondary" id="edit">Edit</button>
-      </div>
-      <div class="detail-actions three">
-        <button class="btn secondary" id="add">+ Macro</button>
-        <button class="btn secondary" id="export">Export TXT</button>
-        <button class="btn danger" id="delete">Hapus</button>
-      </div>
-    </div>
-  </section>
+<div class="grid">
+<section class="card"><div class="toolbar"><input id="search" placeholder="Cari trigger atau isi macro"><select id="filter"><option value="">Semua</option><option value="text">Text Trigger</option><option value="hotkey">Hotkey</option></select></div><div id="list" class="list"></div></section>
+<section class="card"><div style="font-size:12px;color:#667085;margin-bottom:8px">Detail Macro</div><div id="detail" class="empty">Pilih macro dari daftar.</div></section>
+</div>
+</div>
 </main>
 
-<div class="footer">Data disimpan lokal di browser/device. Untuk backup, gunakan Export TXT. Integrasi auto-fill ke LiveChat tetap membutuhkan userscript/extension pada halaman LiveChat.</div>
-</div>
-
+<div id="modal" class="modal"><div class="sheet"><h2 id="mTitle">Tambah Macro</h2>
+<div class="field"><label>Trigger</label><input id="mTrigger" placeholder="/halo atau CTRL + NUMPAD 1"></div>
+<div class="field"><label>Isi Macro</label><textarea id="mText" rows="12" placeholder="Isi macro..."></textarea></div>
+<div class="actions"><button class="green" id="mSave">Simpan</button><button class="soft" id="mCancel">Batal</button></div></div></div>
 <div class="toast" id="toast"></div>
 
-<div class="modal" id="modal"><div class="modalbox">
-  <h3 id="modalTitle">Tambah macro</h3>
-  <div class="grid2">
-    <div class="fieldgroup"><label>Jenis</label><select class="field" id="mType"><option value="text">Text trigger</option><option value="hotkey">Hotkey</option><option value="none">Tanpa trigger</option></select></div>
-    <div class="fieldgroup"><label>Trigger / Hotkey</label><input class="field" id="mTrigger" placeholder="/halo atau Ctrl+Numpad1"></div>
-  </div>
-  <div class="fieldgroup"><label>Nama / catatan</label><input class="field" id="mName" placeholder="Opsional"></div>
-  <div class="fieldgroup"><label>Isi macro</label><textarea class="field" id="mContent" rows="13" placeholder="Isi macro..."></textarea></div>
-  <div class="detail-actions">
-    <button class="btn secondary" id="cancel">Batal</button><button class="btn" id="save">Simpan</button>
-  </div>
-</div></div>
-
-<div class="modal" id="helpModal"><div class="modalbox">
-  <h3>LATOTO Macro Center</h3>
-  <p>Import TXT/XML untuk memasukkan database macro ke browser. Macro dari XML yang tidak memiliki &lt;tscut&gt; tetap disimpan sebagai hotkey/system berdasarkan atribut trigger Perfect Keyboard.</p>
-  <p>File .4pk diterima dan diperiksa strukturnya. Karena format internal sample .4pk Anda bersifat proprietary dan belum terdokumentasi cukup untuk decoder yang dapat diverifikasi, website tidak membuat data macro palsu dari file tersebut.</p>
-  <button class="btn" id="closeHelp">Tutup</button>
-</div></div>
-
 <script>
-const DB_KEY='latoto_macro_center_v5';
-let macros=[], selectedId=null, editingId=null;
+const SUPABASE_URL = "GANTI_DENGAN_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "GANTI_DENGAN_SUPABASE_PUBLISHABLE_KEY";
+const sb = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+let user=null, macros=[], selected=null, editing=null;
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const makeId=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
-const normalize=s=>String(s??'').replace(/\r\n?/g,'\n').replace(/\u0000/g,'');
-const cleanMacroText=s=>String(s??'')
-  .replace(/<ent__>/g,'\n')
-  .replace(/<ent>/g,'\n')
-  .replace(/&lt;ent__&gt;/g,'\n')
-  .replace(/\\n/g,'\n')
-  .replace(/\n{3,}/g,'\n\n')
-  .trim();
-function persist(){try{localStorage.setItem(DB_KEY,JSON.stringify(macros));}catch(e){showStatus('Gagal menyimpan database: '+e.message,'warn')}}
-function load(){try{const x=JSON.parse(localStorage.getItem(DB_KEY)||'[]'); macros=Array.isArray(x)?x:[]}catch{macros=[]} render()}
-function classify(m){if(m.triggerType==='text'||m.trigger)return'text';if(m.triggerType==='hotkey'||m.hotkey)return'hotkey';return'none'}
-function labelFor(m){const t=classify(m);return t==='text'?(m.trigger||'—'):t==='hotkey'?(m.hotkey||m.rawTrigger||'Hotkey'):'Tanpa trigger'}
-function showStatus(msg,type='ok'){const x=$('status');x.textContent=msg;x.className='status show '+type;clearTimeout(showStatus.t);showStatus.t=setTimeout(()=>x.className='status',6500)}
-function stats(){
- $('total').textContent=macros.length.toLocaleString('id-ID');
- $('triggers').textContent=new Set(macros.map(m=>labelFor(m))).size.toLocaleString('id-ID');
- $('textCount').textContent=macros.filter(m=>classify(m)==='text').length.toLocaleString('id-ID');
- $('hotkeyCount').textContent=macros.filter(m=>classify(m)==='hotkey').length.toLocaleString('id-ID');
+const toast=s=>{let t=$("toast");t.textContent=s;t.classList.add("on");clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove("on"),1700)};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clean=s=>String(s??"").replace(/\r\n?/g,"\n").replace(/\u0000/g,"").trim();
+const hot=s=>/^(HOTKEY|CTRL\s*\+|ALT\s*\+|SHIFT\s*\+|NUMPAD|COMMA$|PERIOD$|SLASH$)/i.test((s||"").trim());
+
+function parseXML(str){
+ const d=new DOMParser().parseFromString(str,"application/xml");
+ if(d.querySelector("parsererror"))throw Error("XML tidak valid.");
+ const out=[];
+ for(const m of d.querySelectorAll("macro")){
+  const tr=m.querySelector("trigger"), t=m.querySelector("macroText")?.textContent||"";
+  const ts=tr?.querySelector("tscut")?.textContent?.trim()||"";
+  const hk=tr?.getAttribute("hk")||"0", hklp=tr?.getAttribute("hklp")||"0", kt=tr?.getAttribute("ktflags")||"0";
+  const trigger=ts||`HOTKEY hk=${hk} hklp=${hklp} ktflags=${kt}`;
+  if(trigger||t)out.push({trigger,text:clean(t)});
+ }
+ return out;
 }
-function select(id){selectedId=id;const m=macros.find(x=>x.id===id);if(!m)return;
- $('selectedBadge').textContent='#'+(m.sourceIndex!=null?m.sourceIndex+1:'custom');
- $('dTrigger').textContent=labelFor(m);$('dType').textContent=classify(m)==='text'?'TEXT TRIGGER':classify(m)==='hotkey'?'HOTKEY / SYSTEM':'TANPA TRIGGER';
- $('dId').textContent=m.uid?'UID '+m.uid:'ID '+m.id;$('dText').textContent=m.content||'(macro kosong)';
- render()
+async function load(){
+ const {data,error}=await sb.from("macros").select("id,trigger,text,created_at,updated_at").order("created_at",{ascending:true});
+ if(error)throw error; macros=data||[]; renderStats(); render();
+}
+function renderStats(){
+ $("countPill").textContent=macros.length.toLocaleString("id-ID")+" macro";
+ $("triggerPill").textContent=[...new Set(macros.map(m=>m.trigger).filter(Boolean))].length.toLocaleString("id-ID")+" trigger";
+ $("syncInfo").textContent="Tersimpan online dan sinkron dengan akun ini.";
 }
 function render(){
- const q=$('q').value.trim().toLowerCase(), typ=$('type').value, sort=$('sort').value;
- let arr=macros.filter(m=>{const t=classify(m);if(typ!=='all'&&t!==typ)return false;if(!q)return true;return [labelFor(m),m.hotkey,m.trigger,m.name,m.content,m.uid,m.rawTrigger].join('\n').toLowerCase().includes(q)});
- arr.sort((a,b)=>sort==='new'?(b.updatedAt||0)-(a.updatedAt||0):sort==='old'?(a.updatedAt||0)-(b.updatedAt||0):labelFor(a).localeCompare(labelFor(b),'id'));
- stats();$('result').textContent=arr.length.toLocaleString('id-ID')+' hasil';
- if(!arr.length){$('list').innerHTML='<div class="empty">Tidak ada macro yang cocok.</div>';return}
- $('list').innerHTML=arr.slice(0,700).map(m=>{const t=classify(m);return `<article class="card ${m.id===selectedId?'selected':''}" data-id="${esc(m.id)}">
- <div class="trigger">${esc(labelFor(m))}</div>
- <div class="preview">${esc(m.content)}</div>
- <div class="meta"><span class="tag ${t==='hotkey'?'hot':t==='none'?'none':''}">${t==='text'?'TEXT':t==='hotkey'?'HOTKEY':'NONE'}</span>${m.name?`<span class="tag">${esc(m.name)}</span>`:''}<span class="kbd">${m.uid?'UID '+esc(m.uid):'#'+esc(m.sourceIndex!=null?m.sourceIndex+1:'custom')}</span>
- <div class="cardactions"><button class="mini copyOne">Copy</button><button class="mini editOne">Edit</button><button class="mini openOne">Buka</button></div></div></article>`}).join('');
- $('list').querySelectorAll('.card').forEach(el=>{const id=el.dataset.id;
-  el.onclick=()=>select(id);
-  el.querySelector('.copyOne').onclick=async e=>{e.stopPropagation();const m=macros.find(x=>x.id===id);if(m)await copyText(m.content)};
-  el.querySelector('.editOne').onclick=e=>{e.stopPropagation();const m=macros.find(x=>x.id===id);if(m)openEditor(m)};
-  el.querySelector('.openOne').onclick=e=>{e.stopPropagation();select(id)};
- })
+ const q=$("search").value.toLowerCase().trim(),f=$("filter").value;
+ const arr=macros.filter(m=>(!q||(`${m.trigger} ${m.text}`).toLowerCase().includes(q))&&(!f||(f==="hotkey"?hot(m.trigger):!hot(m.trigger)))).slice(0,700);
+ const list=$("list");list.innerHTML=arr.length?"":'<div class="empty">Tidak ada macro yang cocok.</div>';
+ for(const m of arr){const d=document.createElement("div");d.className="item"+(m.id===selected?" active":"");d.innerHTML=`<div class="trigger">${esc(m.trigger)}</div><div class="meta">${hot(m.trigger)?"Hotkey":"Text Trigger"} · ${m.id}</div><div class="snip">${esc(m.text)}</div><div class="actions"><button class="soft" data-open="${m.id}">Buka</button><button class="soft" data-copy="${m.id}">Copy</button></div>`;list.appendChild(d)}
 }
-async function copyText(text){try{await navigator.clipboard.writeText(text);toast('Macro berhasil dicopy')}catch{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Macro berhasil dicopy')}}
-function toast(msg){const x=$('toast');x.textContent=msg;x.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove('show'),1700)}
-function openEditor(m=null){editingId=m?.id||null;$('modalTitle').textContent=m?'Edit macro':'Tambah macro';$('mType').value=m?classify(m):'text';$('mTrigger').value=m?((m.trigger||m.hotkey||m.rawTrigger||'')):'';$('mName').value=m?.name||'';$('mContent').value=m?.content||'';$('modal').classList.add('show');setTimeout(()=>$('mTrigger').focus(),30)}
-function closeEditor(){$('modal').classList.remove('show');editingId=null}
-function saveEditor(){const type=$('mType').value,val=$('mTrigger').value.trim(),content=$('mContent').value;if(!content){showStatus('Isi macro wajib diisi','warn');return}if(type!=='none'&&!val){showStatus('Trigger/hotkey wajib diisi','warn');return}
- const old=editingId?macros.find(m=>m.id===editingId):null;
- const m={id:editingId||makeId(),createdAt:old?.createdAt||Date.now(),updatedAt:Date.now(),name:$('mName').value.trim(),content,triggerType:type,trigger:type==='text'?val:'',hotkey:type==='hotkey'?val:'',rawTrigger:'',source:'manual'};
- if(old)macros=macros.map(x=>x.id===editingId?{...x,...m}:x);else macros.unshift(m);
- selectedId=m.id;persist();closeEditor();render();showStatus(old?'Macro diperbarui':'Macro ditambahkan');select(m.id)
+function detail(id){
+ const m=macros.find(x=>x.id===id);if(!m)return;selected=id;render();
+ $("detail").className="";$("detail").innerHTML=`<div class="trigger">${esc(m.trigger)}</div><div class="meta">${hot(m.trigger)?"Hotkey":"Text Trigger"} · ${m.id}</div><hr><div class="preview">${esc(m.text)}</div><div class="actions"><button class="green" id="dc">Copy</button><button id="de">Edit</button><button class="red" id="dd">Hapus</button></div>`;
+ $("dc").onclick=()=>copy(m.text);$("de").onclick=()=>openModal(id);$("dd").onclick=()=>removeMacro(id);
 }
-function parseXml(text){
- const doc=new DOMParser().parseFromString(text,'application/xml');if(doc.querySelector('parsererror'))throw new Error('XML tidak valid');
- const els=[...doc.getElementsByTagName('macro')];if(!els.length)throw new Error('Tidak menemukan <macro>');
- return els.map((el,i)=>{const mt=el.querySelector(':scope > macroText')||el.getElementsByTagName('macroText')[0];const tr=el.querySelector(':scope > trigger')||el.getElementsByTagName('trigger')[0];const ts=tr?.getElementsByTagName('tscut')[0];const hk=tr?.getAttribute('hk')||'',hklp=tr?.getAttribute('hklp')||'',hkx=tr?.getAttribute('hkx')||'',hkxlp=tr?.getAttribute('hkxlp')||'',ktflags=tr?.getAttribute('ktflags')||'',trigtype=tr?.getAttribute('trigtype')||'';const trig=(ts?.textContent||'').trim();const hot=!trig&&(hk||hklp||hkx||hkxlp||ktflags==='17')?[hk&&('hk='+hk),hklp&&('hklp='+hklp),hkx&&('hkx='+hkx),hkxlp&&('hkxlp='+hkxlp)].filter(Boolean).join(' · '):'';return{id:makeId(),createdAt:Date.now()+i,updatedAt:Date.now()+i,name:el.getAttribute('name')||'',uid:el.getAttribute('uid')||'',content:cleanMacroText(mt?.textContent||''),triggerType:trig?'text':hot?'hotkey':'none',trigger:trig,hotkey:hot,rawTrigger:'',source:'xml',sourceIndex:i,perfect:{hk,hklp,hkx,hkxlp,ktflags,trigtype}}})
+async function copy(t){try{await navigator.clipboard.writeText(t);toast("Macro berhasil dicopy")}catch{toast("Clipboard diblokir browser")}}
+function openModal(id=null){editing=id;$("mTitle").textContent=id?"Edit Macro":"Tambah Macro";let m=macros.find(x=>x.id===id);$("mTrigger").value=m?.trigger||"";$("mText").value=m?.text||"";$("modal").classList.add("show")}
+$("mCancel").onclick=()=>$("modal").classList.remove("show");
+$("modal").onclick=e=>{if(e.target.id==="modal")$("modal").classList.remove("show")};
+$("add").onclick=()=>openModal();
+$("mSave").onclick=async()=>{
+ const trigger=$("mTrigger").value.trim(),text=clean($("mText").value);if(!trigger||!text)return toast("Trigger dan isi wajib diisi");
+ let res;
+ if(editing){res=await sb.from("macros").update({trigger,text,updated_at:new Date().toISOString()}).eq("id",editing);selected=editing}
+ else{res=await sb.from("macros").insert({user_id:user.id,trigger,text}).select().single();selected=res.data?.id||null}
+ if(res.error){alert(res.error.message);return}
+ $("modal").classList.remove("show");editing=null;await load();if(selected)detail(selected);toast("Macro tersimpan");
 }
-function parseOwnExport(s){const out=[];let cur=null,inContent=false;for(const l of normalize(s).split('\n')){if(l==='--- MACRO ---'){if(cur)out.push(cur);cur={id:makeId(),createdAt:Date.now()+out.length,updatedAt:Date.now()+out.length,name:'',content:'',triggerType:'none',trigger:'',hotkey:'',source:'txt'};inContent=false}else if(cur){if(l.startsWith('TYPE='))cur.triggerType=l.slice(5);else if(l.startsWith('TRIGGER='))cur.trigger=l.slice(8);else if(l.startsWith('HOTKEY='))cur.hotkey=l.slice(7);else if(l.startsWith('NAME='))cur.name=l.slice(5);else if(l==='CONTENT_START')inContent=true;else if(l==='CONTENT_END')inContent=false;else if(inContent)cur.content+=(cur.content?'\n':'')+l}}if(cur)out.push(cur);return out}
-function parseTxt(text){
- const s=normalize(text).replace(/^\uFEFF/,'');
- if(/^LATOTO_MACRO_CENTER_TXT\s*$/m.test(s))return parseOwnExport(s);
+async function removeMacro(id){if(!confirm("Hapus macro ini?"))return;const {error}=await sb.from("macros").delete().eq("id",id);if(error)return alert(error.message);selected=null;await load();$("detail").className="empty";$("detail").textContent="Pilih macro dari daftar.";toast("Macro dihapus")}
+$("list").onclick=e=>{let a=e.target.closest("[data-open]"),b=e.target.closest("[data-copy]");if(a)detail(a.dataset.open);if(b){let m=macros.find(x=>x.id===b.dataset.copy);if(m)copy(m.text)}};
+$("search").oninput=render;$("filter").onchange=render;
+$("xml").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let arr=parseXML(await f.text());if(macros.length&&!confirm(`Database berisi ${macros.length} macro. Tambahkan ${arr.length} macro dari XML?`))return;let payload=arr.map(x=>({user_id:user.id,trigger:x.trigger,text:x.text}));let {error}=await sb.from("macros").insert(payload);if(error)throw error;await load();toast(arr.length+" macro diimpor & disimpan online")}catch(x){alert("Gagal import XML: "+x.message)}e.target.value=""};
+$("clear").onclick=async()=>{if(macros.length&&!confirm(`Hapus seluruh ${macros.length} macro?`))return;const {error}=await sb.from("macros").delete().eq("user_id",user.id);if(error)return alert(error.message);selected=null;await load();$("detail").className="empty";$("detail").textContent="Database kosong.";toast("Semua macro dihapus")};
+function dl(data,name,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click()}
+$("backup").onclick=()=>dl(JSON.stringify({app:"LATOTO Macro Center",version:1,macros},null,2),"LATOTO_Macro_Backup.json","application/json");
+$("restoreBtn").onclick=()=>$("restore").click();
+$("restore").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let o=JSON.parse(await f.text());if(!Array.isArray(o.macros))throw Error("Backup tidak valid");let arr=o.macros.map(x=>({user_id:user.id,trigger:String(x.trigger||""),text:clean(x.text)}));let {error}=await sb.from("macros").insert(arr);if(error)throw error;await load();toast(arr.length+" macro direstore")}catch(x){alert(x.message)}e.target.value=""};
+$("export").onclick=()=>{if(!macros.length)return toast("Database kosong");let s='<?xml version="1.0" encoding="utf-8"?>\n<mtw_export_macros>\n';macros.forEach((m,i)=>{let t=String(m.text).replaceAll("]]>","]]]]><![CDATA[>"),tr=String(m.trigger).replaceAll("]]>","]]]]><![CDATA[>");s+=`<macro inum="${i}" onum="${i}"><macroText><![CDATA[${t}]]></macroText><descr><![CDATA[]]></descr><trigger><tscut><![CDATA[${tr}]]></tscut></trigger></macro>\n`});dl(s+"</mtw_export_macros>\n","LATOTO_Macro_Export.xml","application/xml")};
 
- // Format TXT hasil export lama:
- // Macro 1
- // Trigger: /10menit
- // MacroText:
- // isi macro...
- // --------------------------------------------------
- const blockRe=/(?:^|\n)\s*Macro\s+(\d+)\s*\n\s*Trigger:\s*(.*?)\n\s*MacroText:\s*\n([\s\S]*?)(?=\n\s*-{5,}\s*(?:\n|$)|\n\s*Macro\s+\d+\s*\n|$)/g;
- const structured=[]; let m;
- while((m=blockRe.exec(s))!==null){
-   const trigger=(m[2]||'').trim();
-   const content=cleanMacroText((m[3]||'').replace(/\n\s*-{5,}\s*$/,'').trim());
-   structured.push({
-     id:makeId(), createdAt:Date.now()+structured.length, updatedAt:Date.now()+structured.length,
-     name:'', content, triggerType:trigger?(/^\//.test(trigger)?'text':'hotkey'):'none',
-     trigger:/^\//.test(trigger)?trigger:'', hotkey:/^\//.test(trigger)?'':trigger,
-     rawTrigger:trigger, source:'txt', sourceIndex:structured.length
-   });
- }
- if(structured.length) return structured;
-
- // Format TAB/line based yang lebih sederhana
- const lines=s.split('\n'),out=[];let cur=null;
- for(const line of lines){
-   let m=line.match(/^\s*(\/[^\t\s]+)\s*(?:\t+|\s{2,})(.*)$/);
-   if(m){if(cur)out.push(cur);cur={id:makeId(),createdAt:Date.now()+out.length,updatedAt:Date.now()+out.length,name:'',content:cleanMacroText(m[2]||''),triggerType:'text',trigger:m[1],hotkey:'',rawTrigger:m[1],source:'txt'};continue}
-   if(/^\s*\/\S+\s*$/.test(line)){if(cur)out.push(cur);cur={id:makeId(),createdAt:Date.now()+out.length,updatedAt:Date.now()+out.length,name:'',content:'',triggerType:'text',trigger:line.trim(),hotkey:'',rawTrigger:line.trim(),source:'txt'};continue}
-   if(cur)cur.content=cleanMacroText(cur.content+(cur.content?'\n':'')+line)
- }
- if(cur)out.push(cur);
- if(!out.length){
-   const chunks=s.split(/\n\s*\n+/).filter(Boolean);
-   return chunks.map((x,i)=>({id:makeId(),createdAt:Date.now()+i,updatedAt:Date.now()+i,name:'',content:cleanMacroText(x.trim()),triggerType:'none',trigger:'',hotkey:'',source:'txt'}))
- }
- return out
-}
-function cfbDirectory(bytes){
- const dv=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);if(dv.getUint32(0,true)!==0xE011CFD0)return null;
- return {magic:'OLE Compound Document'}
-}
-async function parse4pk(file){const bytes=new Uint8Array(await file.arrayBuffer());const info=cfbDirectory(bytes);if(!info)throw new Error('.4pk tidak dikenali sebagai OLE/Compound Document.');throw new Error('.4pk dikenali sebagai OLE/Compound Document, tetapi payload macro pada contoh ini menggunakan encoding proprietary yang belum memiliki spesifikasi terverifikasi. Tidak ada macro palsu yang dibuat. TXT/XML tetap siap digunakan.')}
-function exportTxt(){let s='LATOTO_MACRO_CENTER_TXT\nVERSION=5\n\n';for(const m of macros){s+='--- MACRO ---\nTYPE='+classify(m)+'\nTRIGGER='+(m.trigger||'')+'\nHOTKEY='+(m.hotkey||'')+'\nNAME='+(m.name||'')+'\nCONTENT_START\n'+(m.content||'')+'\nCONTENT_END\n\n'}const blob=new Blob([s],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='LATOTO_Macro_Center_Backup.txt';a.click();URL.revokeObjectURL(a.href);toast('Database diexport menjadi TXT')}
-async function importFile(file){const ext=file.name.toLowerCase().split('.').pop();try{showProgress(20);let incoming=[];if(ext==='xml'){incoming=parseXml(await file.text());showProgress(75);showStatus(incoming.length===1019?'XML berhasil: 1.019 macro terbaca, termasuk macro hotkey tanpa <tscut>.':`XML terbaca ${incoming.length} macro.`,'ok')}else if(ext==='txt'){incoming=parseTxt(await file.text());showProgress(75);showStatus(`${incoming.length} macro TXT terbaca.`,'ok')}else if(ext==='4pk'){await parse4pk(file)}else throw new Error('Format tidak didukung');if(incoming.length){macros=[...incoming,...macros];persist();selectedId=incoming[0].id;render();select(incoming[0].id);toast(`${incoming.length.toLocaleString('id-ID')} macro disimpan di browser`)}}catch(e){showStatus(e.message,'warn')}finally{setTimeout(()=>{hideProgress()},350)}}
-function showProgress(n){$('progress').classList.add('show');$('progressBar').style.width=n+'%'}function hideProgress(){$('progressBar').style.width='100%';setTimeout(()=>$('progress').classList.remove('show'),180)}
-$('q').oninput=render;$('type').onchange=render;$('sort').onchange=render;
-$('importBtn').onclick=()=>$('fileInput').click();$('fileInput').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importFile(f)};
-$('random').onclick=()=>{if(!macros.length)return;const m=macros[Math.floor(Math.random()*macros.length)];select(m.id);document.querySelector('.layout').scrollIntoView({behavior:'smooth',block:'start'})};
-$('copy').onclick=()=>{const m=macros.find(x=>x.id===selectedId);if(m)copyText(m.content)};
-$('edit').onclick=()=>{const m=macros.find(x=>x.id===selectedId);if(m)openEditor(m)};
-$('add').onclick=()=>openEditor();$('save').onclick=saveEditor;$('cancel').onclick=closeEditor;
-$('modal').onclick=e=>{if(e.target.id==='modal')closeEditor()};
-$('export').onclick=exportTxt;
-$('delete').onclick=()=>{const m=macros.find(x=>x.id===selectedId);if(!m)return;if(confirm('Hapus macro ini?')){macros=macros.filter(x=>x.id!==selectedId);selectedId=null;persist();render();showStatus('Macro dihapus')}};
-$('helpBtn').onclick=()=>$('helpModal').classList.add('show');$('closeHelp').onclick=()=>$('helpModal').classList.remove('show');$('helpModal').onclick=e=>{if(e.target.id==='helpModal')$('helpModal').classList.remove('show')};
-let deferred;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('installBtn').hidden=false;$('installBtn').onclick=async()=>{if(deferred){deferred.prompt();deferred=null}}});
-if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
-load();
-</script>
-</body>
-</html>
+async function showApp(){ $("authCard").classList.add("hidden");$("appHeader").classList.remove("hidden");$("app").classList.remove("hidden");$("accountPill").textContent=user.email||"";try{await load()}catch(e){alert("Database error: "+e.message)}}
+function showAuth(msg=""){ $("authCard").classList.remove("hidden");$("appHeader").classList.add("hidden");$("app").classList.add("hidden");$("authMsg").textContent=msg}
+$("login").onclick=async()=>{let {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)$("authMsg").textContent=error.message;else{user=data.user;showApp()}};
+$("signup").onclick=async()=>{let {data,error}=await sb.auth.signUp({email:$("email").value.trim(),password:$("password").value});if(error)$("authMsg").textContent=error.message;else $("authMsg").textContent=data.session?"Akun dibuat dan login.":"Akun dibuat. Cek email jika verifikasi diaktifkan."};
+$("logout").onclick=async()=>{await sb.auth.signOut();user=null;macros=[];showAuth("Anda sudah keluar.")};
+sb.auth.onAuthStateChange((_e,session)=>{if(session?.user&&!user){user=session.user;showApp()}else if(!session)showAuth()});
+(async()=>{if(SUPABASE_URL.startsWith("GANTI_")){showAuth("Konfigurasi Supabase belum diisi di index.html.");return}let {data}=await sb.auth.getSession();if(data.session){user=data.session.user;showApp()}else showAuth()})();
+</script></body></html>
