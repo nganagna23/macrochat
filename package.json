@@ -1,0 +1,11 @@
+{
+  "name":"latoto-macro-center",
+  "version":"2.0.0",
+  "private":true,
+  "description":"LATOTO Macro Center - online macro manager for Perfect Keyboard / MTW",
+  "dependencies":{
+    "@neondatabase/serverless":"^1.0.2",
+    "cfb":"^1.2.2",
+    "@xmldom/xmldom":"^0.8.10"
+  }
+}
